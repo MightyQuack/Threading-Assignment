@@ -15,7 +15,7 @@ public class Zoo {
 	// Animal object
 	static Animal animal;
 
-	// Foodstock
+	// FoodStock object
 	public static FoodStock foodStock = new FoodStock();
 
 	// ArrayList to hold Animal objects
@@ -50,25 +50,21 @@ public class Zoo {
 		ExecutorService executor = Executors.newFixedThreadPool(2);
 		executor.execute(new DepositTask());
 		executor.execute(new WithdrawTask());
+
 		// Shutdown executor
 		executor.shutdown();
-	} // end of Main
+	}
 
 	static void loadDatabase() {
 		loadDriver();
 		createConnection();
 		createStatement();
-		// Drop table every time you run program
-		dropTable();
+		dropTable(); // Drop table every time you run program
 		createTable();
 		insert();
-		// Q1
-		readAllRecords();
-		// Q2
-		readMaxWithMetaData();
-		// Q3
-		readTotalWithMetaData();
-
+		readAllRecords(); // Question 1
+		readMaxWithMetaData(); // Question 2
+		readTotalWithMetaData(); // Question 3
 	}
 
 	// Method to load JDBC driver
@@ -79,7 +75,7 @@ public class Zoo {
 		} catch (Exception e) {
 			System.out.println("Error: " + e + "\n");
 		}
-	} // end of loadDriver
+	}
 
 	// Method to create connection with database
 	static void createConnection() {
@@ -95,7 +91,7 @@ public class Zoo {
 		} catch (SQLException e) {
 			System.out.println("There was an error with connecting! " + e + "\n");
 		}
-	} // end of createConnection
+	}
 
 	// Method to create statement
 	static void createStatement() {
@@ -105,7 +101,7 @@ public class Zoo {
 		} catch (SQLException e) {
 			System.out.println("There was an error with Statement Connection " + e + "\n");
 		}
-	} // end of createStatement
+	}
 
 	// Method to create table in database
 	static void createTable() {
@@ -116,7 +112,7 @@ public class Zoo {
 		} catch (SQLException e) {
 			System.out.println("There was an error with creating a table" + e + "\n");
 		}
-	} // end of createTable
+	}
 
 	// Method to drop existing table in database
 	static void dropTable() {
@@ -127,7 +123,7 @@ public class Zoo {
 		} catch (SQLException e) {
 			System.out.println("Error with dropping table " + e + "\n");
 		}
-	} // end of dropTable
+	}
 
 	// Method to insert data into table
 	static void insert() {
@@ -140,7 +136,7 @@ public class Zoo {
 				System.out.println("Error with inserting into table " + e + "\n");
 			}
 		}
-	} // end of insert
+	}
 
 	// Method to read from table
 	static void readAllRecords() {
@@ -156,7 +152,7 @@ public class Zoo {
 		} catch (SQLException e) {
 			System.out.println("Error with reading from table " + e + "\n");
 		}
-	} // end of readAllRecords
+	}
 
 	// Method to select the animal which consumed the highest amount of food
 	static void readMaxWithMetaData() {
@@ -165,9 +161,10 @@ public class Zoo {
 		String read = "select MAX(amountFed) as max from FeedingData";
 		try {
 			resultSet = statement.executeQuery(read);
-			ResultSetMetaData resultSetMetaData = resultSet.getMetaData(); // will return object of metadata type ->
-			// contains detailed data about the tables
-			// metadata
+			// resultSetMetaData will return object of metadata type
+			// which contains detailed data about the tables metadata
+			ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+
 			int noOfCol = resultSetMetaData.getColumnCount();
 			for (int i = 1; i <= noOfCol; i++) {
 				System.out.print(resultSetMetaData.getColumnName(i) + ": ");
@@ -175,13 +172,12 @@ public class Zoo {
 			while (resultSet.next()) {
 				for (int i = 1; i <= noOfCol; i++) {
 					System.out.print(resultSet.getObject(i) + "\n");
-
 				}
 			}
 		} catch (SQLException e) {
 			System.out.println("Error with reading with metadata " + e);
 		}
-	} // end of readMaxWithMetaData
+	}
 
 	// Method to read total amount of food consumed by all animals
 	static void readTotalWithMetaData() {
@@ -189,7 +185,7 @@ public class Zoo {
 		String read = "select sum(amountFed) as sum from FeedingData";
 		try {
 			resultSet = statement.executeQuery(read);
-			ResultSetMetaData resultSetMetaData = resultSet.getMetaData(); // will return object of metadata type ->
+			ResultSetMetaData resultSetMetaData = resultSet.getMetaData(); // will return object of metadata type
 			// contains detailed data about the tables
 			// metadata
 			int noOfCol = resultSetMetaData.getColumnCount();
@@ -205,7 +201,7 @@ public class Zoo {
 			System.out.println("Error with reading total consumed " + e + "\n");
 		}
 
-	} // end of readTotalWithMetaData
+	}
 
 	// Class created to use Runnable interface
 	public static class DepositTask implements Runnable {
@@ -217,13 +213,12 @@ public class Zoo {
 					foodStock.deposit((int) (Math.random() * 10) + 1);
 					// Sleep
 					Thread.sleep(1000);
-				} // end of while
-			} // end of try
-			catch (InterruptedException ex) {
+				}
+			} catch (InterruptedException ex) {
 				ex.printStackTrace();
 			}
-		} // end of run method
-	} // end of DepositTask
+		}
+	}
 
 	// Class created to use Runnable interface
 	public static class WithdrawTask implements Runnable {
@@ -243,7 +238,7 @@ public class Zoo {
 				animal = animals.get(0);
 				System.out.println("Next animal: " + animals.get(0).toString());
 				System.out.println("\t\t\tFeed " + animal.getName() + " " + animal.getFoodNeeded());
-			} // end of for
-		} // end of run method
-	} // end of WithdrawTask
-} // end of Zoo
+			}
+		}
+	}
+}
